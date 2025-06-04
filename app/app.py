@@ -19,32 +19,38 @@ def serapi_search():
     """
     Endpoint para pesquisar no Google Maps usando SerpAPI com paginação automática.
     
-    Parâmetros esperados no JSON:
+    Query Parameters:
     - q: termo de busca (obrigatório)
     - ll: coordenadas no formato "@lat,lng,zoom" (opcional)
-    - api_key: chave da SerpAPI (obrigatório)
+    
+    Headers:
+    - Authorization: Bearer YOUR_API_KEY (obrigatório)
     
     Retorna:
     - JSON com todos os resultados concatenados de todas as páginas
     """
     try:
-        # Obter dados da requisição
-        data = request.json
-        if not data:
-            return jsonify({"error": "JSON body é obrigatório"}), 400
+        # Obter parâmetros da query string
+        query = request.args.get("q")
+        ll = request.args.get("ll")
+        
+        # Obter API key do header Authorization
+        auth_header = request.headers.get("Authorization")
         
         # Validar parâmetros obrigatórios
-        query = data.get("q")
-        api_key = data.get("api_key")
-        
         if not query:
-            return jsonify({"error": "Parâmetro 'q' (termo de busca) é obrigatório"}), 400
+            return jsonify({"error": "Query parameter 'q' (termo de busca) é obrigatório"}), 400
         
+        if not auth_header:
+            return jsonify({"error": "Header 'Authorization' é obrigatório"}), 400
+        
+        # Extrair API key do header (formato: "Bearer API_KEY")
+        if not auth_header.startswith("Bearer "):
+            return jsonify({"error": "Header Authorization deve estar no formato 'Bearer YOUR_API_KEY'"}), 400
+        
+        api_key = auth_header.replace("Bearer ", "").strip()
         if not api_key:
-            return jsonify({"error": "Parâmetro 'api_key' é obrigatório"}), 400
-        
-        # Parâmetros opcionais
-        ll = data.get("ll")  # coordenadas
+            return jsonify({"error": "API key não pode estar vazia"}), 400
         
         # Configurar parâmetros base para a SerpAPI
         base_params = {
