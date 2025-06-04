@@ -14,7 +14,7 @@ def soma():
     valor = data.get("valor", 0)
     return jsonify({"resultado": valor + 1})
 
-@app.route("/serAPI", methods=["POST"])
+@app.route("/serAPI", methods=["GET"])
 def serapi_search():
     """
     Endpoint para pesquisar no Google Maps usando SerpAPI com paginação automática.
