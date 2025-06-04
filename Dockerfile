@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para iniciar o app
-CMD ["python", "app.py"]
+CMD ["python", "app/app.py"]
