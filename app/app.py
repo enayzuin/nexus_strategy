@@ -77,8 +77,8 @@ def serapi_search():
         max_pages = 50  # Limite de segurança para evitar loops infinitos
         
         print(f"Iniciando busca para: {query}")
-        if max_pages > 10:
-            max_pages = 10;
+        if max_pages > 5:
+            max_pages = 5;
         while page_count < max_pages:
             # Adicionar parâmetro de offset
             params = base_params.copy()
